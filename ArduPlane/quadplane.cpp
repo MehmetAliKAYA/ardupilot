@@ -1672,6 +1672,11 @@ void SLT_Transition::update()
         quadplane.set_desired_spool_state(AP_Motors::DesiredSpoolState::THROTTLE_UNLIMITED);
         // after airspeed is reached we degrade throttle over the
         // transition time, but continue to stabilize
+        
+        // Aileron ve elevator servolarına minimum değerlerini ata transition boyunca min de kalsınlar
+        quadplane.give_min_pwm_to_servos();
+        // t182t
+        
         const uint32_t transition_timer_ms = now - transition_low_airspeed_ms;
         if (transition_timer_ms > (unsigned)quadplane.transition_time_ms) {
             transition_state = TRANSITION_DONE;
@@ -4160,6 +4165,15 @@ void QuadPlane::set_desired_spool_state(AP_Motors::DesiredSpoolState state)
         }
         motors->set_desired_spool_state(state);
     }
+}
+    
+// t182t
+void QuadPlane::give_min_pwm_to_servos(){
+    
+    SRV_Channel *c = SRV_Channels::srv_channel(2);
+    const uint16_t min = c->get_output_min();
+    const float a = min;   
+    SRV_Channels::set_output_scaled(SRV_Channel::k_aileron,a);
 }
 
 bool QuadPlane::air_mode_active() const
