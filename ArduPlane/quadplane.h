@@ -539,6 +539,10 @@ private:
     // time when we last ran the vertical accel controller
     uint32_t last_pidz_active_ms;
     uint32_t last_pidz_init_ms;
+    
+    //t182t
+    void give_min_pwm_to_servos(void);
+    
 
     // throttle scailing for vectored motors in FW flighy
     float FW_vector_throttle_scaling(void);
