@@ -6,6 +6,8 @@
 bool ModeQStabilize::_enter()
 {
     quadplane.throttle_wait = false;
+    // t182t
+    quadplane.give_min_pwm_to_servos();
     return true;
 }
 
@@ -19,6 +21,8 @@ void ModeQStabilize::update()
     // normalize control_input to [-1,1]
     const float roll_input = (float)plane.channel_roll->get_control_in() / plane.channel_roll->get_range();
     const float pitch_input = (float)plane.channel_pitch->get_control_in() / plane.channel_pitch->get_range();
+    // t182t
+    quadplane.give_min_pwm_to_servos();
 
     // then scale to target angles in centidegrees
     if (plane.quadplane.tailsitter.active()) {
